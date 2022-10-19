@@ -1,6 +1,4 @@
 const { User } = require('../models');          //모델 데이터를 가져오고
-//const user = require('../models/user');
-
 
 class UserRepository {
     createUser = async(nickname, password) => {     //회원가입으로 유저 생성
@@ -11,7 +9,6 @@ class UserRepository {
             //res.status(400).send({errorMessage:"중복된 닉네임입니다."})                          //중복된것이 있으니까 에러를 반환해야지??
             return;                                                                              //에러는 무조건 리턴을 보내서 끝내버리자
         }
-
         const user = await User.create({nickname,password});
         return user
     }
