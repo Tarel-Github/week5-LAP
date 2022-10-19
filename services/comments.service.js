@@ -27,7 +27,10 @@ class CommentService{
         return createComment
     }
 
-    // deleteComment
+    deleteComment= async (commentId, userId) => {
+        const createComment = await this.commentRepository.deleteComment(commentId, userId);
+        return createComment
+    }
 
 }
 

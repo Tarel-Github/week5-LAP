@@ -26,22 +26,24 @@ class PostService {
 
     //포스트를 업데이트 수정하는 경우
     updatePost = async (postId, title, content, userId) => {
-        // const findPost = await this.postRepository.findPostById(postId);
-        // if(!findPost) throw new Error("없는 포스트입니다.")     //포스트가 없으면 에러 던지기
-        
-        // await this.postRepository.updatePost(postId, title, content);//리포의 포스트업데이트를 실행
-
-        const updatePost = await this.postRepository.updatePost(postId, title, content, userId);//수정된걸 다시 가져와서
+       const updatePost = await this.postRepository.updatePost(postId, title, content, userId);//수정된걸 다시 가져와서
         return updatePost
     };
 
-    deletePost = async (postId) => {
-        // const findPost = await this.postRepository.findPostById(postId);//리포에 있는 findPostById를 호출
-        // if(!findPost) throw new Error("없는 포스트입니다.")     //포스트가 없으면 에러 던지기
-        
-        const deletePost = await this.postRepository.deletePost(postId);//포스트 아이디와 비번이 일치한걸 찾아서 지우기
-        //리포에 있는 deletePost함수를 참조한다.
-        return deletePost
+    deletePost = async (postId) => {    
+        const deletePost = await this.postRepository.deletePost(postId);
     };
+
+
+    likePost = async (res, postId, userId) => {
+        const likePost = await this.postRepository.likePost(res, postId, userId);
+        return likePost
+    };
+
+    likeGet = async (res,userId) => {
+        const likeGet = await this.postRepository.likeGet(res, userId);
+        return likeGet
+    };
+
 }
 module.exports = PostService;
