@@ -1,14 +1,46 @@
-const express = require('express');
-const router = express.Router();
-const Auth = require('../middlewares/auth-middleware')
+const { User, Post, Comment } = require('../models');          //모델 데이터를 가져오고
 
-const CommentsController = require('../controllers/comments.controller');
-const commentsController = new CommentsController();
+class CommentRepository {
+    findComment = async (postId) =>{
+        const comments = await Comment.findAll({where: { postId },      //postId를 기반으로 포스트를 가져오고
+            include: [{model: User,attributes: ["nickname"],},],        //작성한 유저의 닉네임을 포함해서 가져온다!
+            order: [["createdAt", "DESC"]],
+          });
 
-// comments/
-router.get('/:postId', commentsController.getComments);            //덧글 열람하기
-router.post('/:postId', Auth, commentsController.createComment);           //덧글 작성하기
-// router.put('/:commentId',Auth, commentsController);         //덧글 수정하기
-// router.delete('/:commentId',Auth, commentsController);      //덧글 삭제하기
+        return comments;
+    }
 
-module.exports = router;
+    findPostById = async (postId) => {              //아이디를 기반으로 포스트 찾기
+        console.log("코멘트 리포, 아이디로 포스트 찾기")
+        const post = await Post.findByPk(postId);
+        return post;
+    };
+
+    createComment = async (content, userId, postId) => {
+        const createCommentData = await Comment.create({content, userId, postId});//이게 문제다
+        return createCommentData;
+    }
+
+    updateComment = async (commentId, content, userId) => {
+        const commentAu = await Comment.findByPk(commentId); //수정하고자 하는 코멘트를 가져옴
+        const commentAuId = commentAu.userId            //그 코멘트의 유저 아이디를 가져옴
+        if(userId !== commentAuId){                     //로그인 ID가 작성자 ID와 다르면 아무것도 하지 않고 리턴
+            return;
+        }
+        const updateCommentData = await Comment.update({content}, {where: {commentId}})
+        return updateCommentData
+    }
+
+    deleteComment = async (commentId, userId) => {
+        const commentAu = await Comment.findByPk(commentId); //수정하고자 하는 코멘트를 가져옴
+        const commentAuId = commentAu.userId            //그 코멘트의 유저 아이디를 가져옴
+        if(userId !== commentAuId){                     //로그인 ID가 작성자 ID와 다르면 아무것도 하지 않고 리턴
+            return;
+        }
+            const updateCommentData = await Comment.destroy({where: {commentId}})
+        return updateCommentData
+    }
+
+}
+
+module.exports = CommentRepository ;

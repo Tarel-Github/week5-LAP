@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken")
 
 class UsersController {
     userService = new UserService();
-
     //회원가입
     signup = async (req, res, next) => { 
         const { nickname, password, confirmPassword } = req.body;
@@ -54,8 +53,6 @@ class UsersController {
             res.status(400).json({message:"잘못된 로그인 요청입니다."});
             return;
         }
-
-
     }
 }
 
