@@ -41,17 +41,31 @@ class CommentsController {
         const { content }= req.body;        //수정 내용을 가져오기
         const user=res.locals.user;         //로그인한 유저의 정보
         const userId = user.userId          //로그인 유저의 아이디를 가져옴
-
-
         const updateComment = await this.commentService.updateComment(commentId,content,userId)
-        res.status(200).json({data: updateComment})
+
+        if(!updateComment){
+            res.status(400).send({errorMessage:"수정권한이 없습니다."})
+            return;  
+        }
+
+        res.status(200).json({Message: "덧글 수정 성공"})
     };
 
-    // deleteComment = async (req, res, next) => {
-    //     const {commentId} = req.params;   
-    //     const deleteComment = await this.commentService.deletePost(postId, password);
-    //     res.status(200).json({data: deleteComment});
-    // }
+    deleteComment = async (req, res, next) => {
+        try{
+        const {commentId} = req.params;   
+        const user=res.locals.user;         //로그인한 유저의 정보
+        const userId = user.userId          //로그인 유저의 아이디를 가져옴
+        const deleteComment = await this.commentService.deleteComment(commentId, userId);
+        if(!deleteComment){
+            res.status(400).send({errorMessage:"삭제권한이 없습니다."})
+            return;  
+        }
+        res.status(200).json({data: deleteComment});
+        }catch(error){
+            return res.status(400).send({ errorMessage:"수정 실패."});
+        }
+    }
 
 
 
