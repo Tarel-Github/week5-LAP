@@ -18,7 +18,7 @@ class UserService{
             return{
                 userId: user.userId,
                 nickname: user.nickname,
-                password: user.password,    //일단 이거는 없는게 좋지 않을까???
+                password: user.password,    
                 createdAt: user.createdAt,
                 updatedAt: user.updatedAt
             }
