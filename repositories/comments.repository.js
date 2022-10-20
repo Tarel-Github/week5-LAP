@@ -11,7 +11,6 @@ class CommentRepository {
     }
 
     findPostById = async (postId) => {              //아이디를 기반으로 포스트 찾기
-        console.log("코멘트 리포, 아이디로 포스트 찾기")
         const post = await Post.findByPk(postId);
         return post;
     };
